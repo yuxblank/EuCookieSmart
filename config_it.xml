@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>EuCookieSmart</name>
+	<displayName><![CDATA[EuCookieSmart]]></displayName>
+	<version><![CDATA[0.0.1]]></version>
+	<description><![CDATA[Cookie law banner with ajax features]]></description>
+	<author><![CDATA[Yuri Blanc]]></author>
+	<tab><![CDATA[front_office_features]]></tab>
+	<confirmUninstall><![CDATA[Are you sure to uninstall this module?]]></confirmUninstall>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
