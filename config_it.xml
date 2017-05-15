@@ -3,10 +3,10 @@
 	<name>EuCookieSmart</name>
 	<displayName><![CDATA[EuCookieSmart]]></displayName>
 	<version><![CDATA[0.0.1]]></version>
-	<description><![CDATA[Cookie law banner with ajax features]]></description>
+	<description><![CDATA[Modulo per la Cookie Law personalizzabile e facile da usare]]></description>
 	<author><![CDATA[Yuri Blanc]]></author>
 	<tab><![CDATA[front_office_features]]></tab>
-	<confirmUninstall><![CDATA[Are you sure to uninstall this module?]]></confirmUninstall>
+	<confirmUninstall><![CDATA[Sei sicuro di voler disinstallare questo modulo?]]></confirmUninstall>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
 	<limited_countries></limited_countries>

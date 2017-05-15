@@ -61,14 +61,8 @@ class EuCookieSmart extends Module
      */
     public function install()
     {
-        
-
-        
-        
-        
-
         return
-            Configuration::updateValue('EUCOOKIESMART_MESSAGE', 'We use cookies to track usage and preferences.') &&
+            ConfigurationCore::updateValue('EUCOOKIESMART_MESSAGE', 'We use cookies to track usage and preferences.') &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_ACCEPT', true) &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', 'I Understand') &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_DECLINE', true) &&
@@ -89,10 +83,16 @@ class EuCookieSmart extends Module
             $this->registerHook('displayHeader');
     }
 
+
+
     public function uninstall()
     {
+        $bool = true;
+        foreach ($this->getConfigFormValues() as $key => $val) {
+            $bool = Configuration::deleteByName($key);
+        }
 
-        return parent::uninstall();
+        return $bool && parent::uninstall();
     }
 
     /**
@@ -133,17 +133,44 @@ class EuCookieSmart extends Module
             . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
+        $helper->override_folder = '/';
+        $languages = Language::getLanguages(false);
+        $isMultiLang = count($languages) > 1;
+
         $helper->tpl_vars = array(
             'language' => array(
                 'id_lang' => $language->id,
                 'iso_code' => $language->iso_code
             ),
-            'fields_value' => $this->getConfigFormValues(), /* Add values for your inputs */
+            'fields_value' => $this->getConfigFormValues($isMultiLang),
             'languages' => $this->context->controller->getLanguages(),
-            'id_language' => $this->context->language->id,
+            'id_language' => $this->context->language->id
         );
 
-        return $helper->generateForm(array($this->getConfigForm()));
+
+        if ($isMultiLang)
+            return $this->getMultiLanguageInfoMsg().$helper->generateForm(array($this->getConfigForm()));
+        else
+            return $helper->generateForm(array($this->getConfigForm()));
+    }
+
+
+
+    protected function getMultiLanguageInfoMsg()
+    {
+        return '<p class="alert alert-warning">'.
+            $this->l('Since multiple languages are activated on your shop, please mind to upload your image for each one of them').
+            '</p>';
+    }
+
+    protected function getWarningMultishopHtml()
+    {
+        if (Shop::getContext() == Shop::CONTEXT_GROUP || Shop::getContext() == Shop::CONTEXT_ALL)
+            return '<p class="alert alert-warning">'.
+                $this->l('You cannot manage slides items from a "All Shops" or a "Group Shop" context, select directly the shop you want to edit').
+                '</p>';
+        else
+            return '';
     }
 
     /**
@@ -165,6 +192,7 @@ class EuCookieSmart extends Module
                         'desc' => $this->l('Enter the message to display'),
                         'name' => 'EUCOOKIESMART_MESSAGE',
                         'label' => $this->l('Text message'),
+                        'lang' => true,
                     ),
                     array(
                         'type' => 'switch',
@@ -192,6 +220,7 @@ class EuCookieSmart extends Module
                         'desc' => $this->l('Enter the text for the decline button'),
                         'name' => 'EUCOOKIESMART_BUTTON_ACCEPT_TEXT',
                         'label' => $this->l('Accept button text'),
+                        'lang' => true,
                     ),
                     array(
                         'type' => 'switch',
@@ -219,6 +248,7 @@ class EuCookieSmart extends Module
                         'desc' => $this->l('Enter the text for the decline button'),
                         'name' => 'EUCOOKIESMART_BUTTON_DECLINE_TEXT',
                         'label' => $this->l('Decline button text'),
+                        'lang' => true,
                     ),
                     array(
                         'type' => 'switch',
@@ -246,6 +276,7 @@ class EuCookieSmart extends Module
                         'desc' => $this->l('Enter the text for the policy button'),
                         'name' => 'EUCOOKIESMART_BUTTON_POLICY_TEXT',
                         'label' => $this->l('Policy button text'),
+                        'lang' => true,
                     ),
                     array(
                         'col' => 2,
@@ -390,6 +421,7 @@ class EuCookieSmart extends Module
 
                 'submit' => array(
                     'title' => $this->l('Save'),
+                    'name' => 'saveConfig'
                 ),
             ),
         );
@@ -398,39 +430,114 @@ class EuCookieSmart extends Module
     /**
      * Set values for the inputs.
      */
-    protected function getConfigFormValues()
+    protected function getConfigFormValues($multilang)
     {
         $id_shop_group = Shop::getContextShopGroupID();
         $id_shop = Shop::getContextShopID();
+        $values = array();
+        $languages = Language::getLanguages(false);
+
+
+
+        if ($multilang) {
+            foreach ($languages as $language) {
+                $values['EUCOOKIESMART_MESSAGE_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_MESSAGE', $language['id_lang'], $id_shop_group, $id_shop);
+                $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
+                $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_DECLINE_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
+                $values['EUCOOKIESMART_BUTTON_POLICY_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_POLICY_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
+            }
+            return array_merge($values, $this->getvaluesWithoutTranslation());
+        }
+
+        return $this->getvaluesWithoutTranslation();
+
+    }
+
+
+    private function getvaluesWithoutTranslation() {
+        $id_shop_group = Shop::getContextShopGroupID();
+        $id_shop = Shop::getContextShopID();
         return array(
-            'EUCOOKIESMART_MESSAGE' => Configuration::get('EUCOOKIESMART_MESSAGE', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_ACCEPT_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_DECLINE_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE_TEXT', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_POLICY' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_POLICY_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_TEXT', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BUTTON_POLICY_ARTICLE' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_ACCEPT_CONTINUE' => Configuration::get('EUCOOKIESMART_ACCEPT_CONTINUE', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_ACCEPT_SCROLL' => Configuration::get('EUCOOKIESMART_ACCEPT_SCROLL', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_RENEW_VISIT' => Configuration::get('EUCOOKIESMART_RENEW_VISIT', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
-            'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop)
+                'EUCOOKIESMART_MESSAGE' => Configuration::get('EUCOOKIESMART_MESSAGE', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_ACCEPT_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_DECLINE_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE_TEXT', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_POLICY' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_POLICY_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_TEXT', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BUTTON_POLICY_ARTICLE' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_ACCEPT_CONTINUE' => Configuration::get('EUCOOKIESMART_ACCEPT_CONTINUE', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_ACCEPT_SCROLL' => Configuration::get('EUCOOKIESMART_ACCEPT_SCROLL', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_RENEW_VISIT' => Configuration::get('EUCOOKIESMART_RENEW_VISIT', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop)
+            );
+    }
+
+    public function getFormValues() {
+        $fields = array();
+
+        $languages = Language::getLanguages(false);
+
+        foreach ($languages as $lang)
+        {
+            $fields['EUCOOKIESMART_MESSAGE'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_MESSAGE'.'_'.$lang['id_lang']);
+            $fields['EUCOOKIESMART_BUTTON_ACCEPT_TEXT'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT'.'_'.$lang['id_lang']);
+            $fields['EUCOOKIESMART_BUTTON_DECLINE_TEXT'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT'.'_'.$lang['id_lang']);
+            $fields['EUCOOKIESMART_BUTTON_POLICY_TEXT'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_BUTTON_POLICY_TEXT'.'_'.$lang['id_lang']);
+        }
+
+        return $fields;
+    }
+
+    public function getTraducibleFields () {
+        return array(
+            'EUCOOKIESMART_MESSAGE',
+            'EUCOOKIESMART_BUTTON_ACCEPT_TEXT',
+            'EUCOOKIESMART_BUTTON_DECLINE_TEXT',
+            'EUCOOKIESMART_BUTTON_POLICY_TEXT'
         );
     }
+
+
 
     /**
      * Save form data.
      */
     protected function postProcess()
     {
-        $form_values = $this->getConfigFormValues();
 
-        foreach (array_keys($form_values) as $key) {
-            Configuration::updateValue($key, Tools::getValue($key));
+        if (Tools::isSubmit('saveConfig')) {
+
+
+            $languages = Language::getLanguages(false);
+
+            if ($languages && count($languages)>1) {
+
+                $values = array();
+                foreach ($languages as $lang) {
+                    $values['EUCOOKIESMART_MESSAGE'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_MESSAGE_' . $lang['id_lang']);
+                    $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT_' . $lang['id_lang']);
+                    $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT_' . $lang['id_lang']);
+                    $values['EUCOOKIESMART_BUTTON_POLICY_TEXT'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_BUTTON_POLICY_TEXT_' . $lang['id_lang']);
+                }
+
+                ConfigurationCore::updateValue('EUCOOKIESMART_MESSAGE', $values['EUCOOKIESMART_MESSAGE']);
+                ConfigurationCore::updateValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT']);
+                ConfigurationCore::updateValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT', $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT']);
+                ConfigurationCore::updateValue('EUCOOKIESMART_BUTTON_POLICY_TEXT', $values['EUCOOKIESMART_BUTTON_POLICY_TEXT']);
+            }
+
+
+            foreach (array_keys($this->getvaluesWithoutTranslation()) as $key) {
+                Configuration::updateValue($key, Tools::getValue($key));
+            }
+
+            // todo non multilanguage
         }
+
     }
 
     /**
