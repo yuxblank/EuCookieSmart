@@ -142,7 +142,7 @@ class EuCookieSmart extends Module
                 'id_lang' => $language->id,
                 'iso_code' => $language->iso_code
             ),
-            'fields_value' => $this->getConfigFormValues($isMultiLang),
+            'fields_value' => $this->getConfigFormValues(),
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => $this->context->language->id
         );
@@ -152,6 +152,12 @@ class EuCookieSmart extends Module
             return $this->getMultiLanguageInfoMsg().$helper->generateForm(array($this->getConfigForm()));
         else
             return $helper->generateForm(array($this->getConfigForm()));
+    }
+
+
+    private function isMultiLang(){
+        $languages = Language::getLanguages(false);
+        return count($languages) > 1;
     }
 
 
@@ -185,7 +191,7 @@ class EuCookieSmart extends Module
                     'icon' => 'icon-cogs',
                 ),
                 'input' => array(
-                    array(
+                /*    array(
                         'col' => 6,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-gears"></i>',
@@ -193,7 +199,7 @@ class EuCookieSmart extends Module
                         'name' => 'EUCOOKIESMART_MESSAGE',
                         'label' => $this->l('Text message'),
                         'lang' => true,
-                    ),
+                    ),*/
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Display accept button'),
@@ -213,7 +219,7 @@ class EuCookieSmart extends Module
                             )
                         ),
                     ),
-                    array(
+/*                    array(
                         'col' => 2,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-gears"></i>',
@@ -221,7 +227,7 @@ class EuCookieSmart extends Module
                         'name' => 'EUCOOKIESMART_BUTTON_ACCEPT_TEXT',
                         'label' => $this->l('Accept button text'),
                         'lang' => true,
-                    ),
+                    ),*/
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Display decline button'),
@@ -241,7 +247,7 @@ class EuCookieSmart extends Module
                             )
                         ),
                     ),
-                    array(
+                /*    array(
                         'col' => 2,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-gears"></i>',
@@ -249,7 +255,7 @@ class EuCookieSmart extends Module
                         'name' => 'EUCOOKIESMART_BUTTON_DECLINE_TEXT',
                         'label' => $this->l('Decline button text'),
                         'lang' => true,
-                    ),
+                    ),*/
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Display policy button'),
@@ -269,7 +275,7 @@ class EuCookieSmart extends Module
                             )
                         ),
                     ),
-                    array(
+                  /*  array(
                         'col' => 2,
                         'type' => 'text',
                         'prefix' => '<i class="icon icon-gears"></i>',
@@ -277,7 +283,7 @@ class EuCookieSmart extends Module
                         'name' => 'EUCOOKIESMART_BUTTON_POLICY_TEXT',
                         'label' => $this->l('Policy button text'),
                         'lang' => true,
-                    ),
+                    ),*/
                     array(
                         'col' => 2,
                         'type' => 'text',
@@ -430,7 +436,7 @@ class EuCookieSmart extends Module
     /**
      * Set values for the inputs.
      */
-    protected function getConfigFormValues($multilang)
+    protected function getConfigFormValues()
     {
         $id_shop_group = Shop::getContextShopGroupID();
         $id_shop = Shop::getContextShopID();
@@ -439,7 +445,7 @@ class EuCookieSmart extends Module
 
 
 
-        if ($multilang) {
+        if ($this->isMultiLang()) {
             foreach ($languages as $language) {
                 $values['EUCOOKIESMART_MESSAGE_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_MESSAGE', $language['id_lang'], $id_shop_group, $id_shop);
                 $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', $language['id_lang'], $id_shop_group, $id_shop);

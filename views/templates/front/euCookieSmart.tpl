@@ -14,13 +14,13 @@
 <script>
     $(document).ready(function() {
         $.euCookieSmart( {
-                message: '{$EUCOOKIESMART_MESSAGE}',
+                message: '{$cookieMsg}',
                 acceptButton: '{$EUCOOKIESMART_BUTTON_ACCEPT}',
-                acceptText: '{$EUCOOKIESMART_BUTTON_ACCEPT_TEXT|escape:"quotes"}',
-                declineButton: '{$EUCOOKIESMART_BUTTON_DECLINE}',
+                acceptText: '{$cookieAccept|escape:"quotes"}',
+                declineButton: false,
                 declineText: '{$EUCOOKIESMART_BUTTON_DECLINE_TEXT}',
                 policyButton: '{$EUCOOKIESMART_BUTTON_POLICY}',
-                policyText: '{$EUCOOKIESMART_BUTTON_POLICY_TEXT|escape:"quotes"}',
+                policyText: '{$cookiePolicy|escape:"quotes"}',
                 policyURL: '{$link->getCMSLink($EUCOOKIESMART_BUTTON_POLICY_ARTICLE)}',
                 acceptOnContinue: '{$EUCOOKIESMART_ACCEPT_CONTINUE}',
                 expireDays: '{$EUCOOKIESMART_EXPIRE_DAYS|escape:"quotes"}',

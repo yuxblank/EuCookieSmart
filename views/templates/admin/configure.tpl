@@ -24,25 +24,15 @@
 *}
 
 <div class="panel">
-	<h3><i class="icon icon-credit-card"></i> {l s='EuCookieSmart' mod='EuCookieSmart'}</h3>
+	<h3><i class="icon icon-barcode"></i> {l s='EuCookieSmart' mod='EuCookieSmart'}</h3>
 	<p>
-		<strong>{l s='Here is my new generic module!' mod='EuCookieSmart'}</strong><br />
-		{l s='Thanks to PrestaShop, now I have a great module.' mod='EuCookieSmart'}<br />
+		<strong>{l s='This module allow to display an Eu Cookie Banner' mod='EuCookieSmart'}</strong><br />
 		{l s='I can configure it using the following configuration form.' mod='EuCookieSmart'}
 	</p>
 	<br />
 	<p>
-		{l s='This module will boost your sales!' mod='EuCookieSmart'}
-	</p>
-</div>
+		&copy; Yuri Blanc <br>
 
-<div class="panel">
-	<h3><i class="icon icon-tags"></i> {l s='Documentation' mod='EuCookieSmart'}</h3>
-	<p>
-		&raquo; {l s='You can get a PDF documentation to configure this module' mod='EuCookieSmart'} :
-		<ul>
-			<li><a href="#" target="_blank">{l s='English' mod='EuCookieSmart'}</a></li>
-			<li><a href="#" target="_blank">{l s='French' mod='EuCookieSmart'}</a></li>
-		</ul>
+		<a href="www.yuriblanc.it">www.yuriblanc.it</a>
 	</p>
 </div>
