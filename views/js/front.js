@@ -1,17 +1,12 @@
-/*
- * Copyright (C) 2012 PrimeBox (info@primebox.co.uk)
+/**
+ * NOTICE OF LICENSE
  *
- * This work is licensed under the Creative Commons
- * Attribution 3.0 Unported License. To view a copy
- * of this license, visit
- * http://creativecommons.org/licenses/by/3.0/.
+ * only18plus is a module for blocking and verifying user age
+ * Copyright (C) 2017 Yuri Blanc
+ * Email: info@yuriblanc.it
+ * Website: www.yuriblanc.it
  *
- * Documentation available at:
- * http://www.primebox.co.uk/projects/cookie-bar/
- *
- * When using this software you use it at your own risk. We hold
- * no responsibility for any damage caused by using this plugin
- * or the documentation provided.
+ * This program is distributed WITHOUT ANY WARRANTY;
  */
 (function($){
     $.euCookieSmart = function(options,val){

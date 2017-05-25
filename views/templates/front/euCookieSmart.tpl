@@ -1,4 +1,15 @@
-{* todo refactor *}
+{* todo refactor
+/**
+ * NOTICE OF LICENSE
+ *
+ * only18plus is a module for blocking and verifying user age
+ * Copyright (C) 2017 Yuri Blanc
+ * Email: info@yuriblanc.it
+ * Website: www.yuriblanc.it
+ *
+ * This program is distributed WITHOUT ANY WARRANTY;
+ */
+*}
 
 {if $lang_iso == 'it'}
     {assign var="cookieMsg" value="Questo sito utilizza cookie necessari al corretto funzionamento. Chiudendo questo banner, scorrendo questa pagina, cliccando su un link o proseguendo la navigazione in altra maniera, acconsenti all’uso dei cookie."}
