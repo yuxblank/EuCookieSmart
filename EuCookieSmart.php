@@ -66,7 +66,9 @@ class EuCookieSmart extends Module
             parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
-            $this->registerHook('displayHeader');
+            $this->registerHook('displayHeader') &&
+            $this->registerHook('actionFrontControllerSetMedia') &&
+            $this->registerHook('displayFooter');
     }
 
 
@@ -554,12 +556,27 @@ class EuCookieSmart extends Module
 
     public function hookDisplayHeader()
     {
-        $this->hookHeader();
+        $this->context->controller->addJS($this->_path . '/views/js/euCookieSmart.js');
+        $this->context->controller->addCSS($this->_path . '/views/css/front.css');
+    }
+
+    public function hookActionFrontControllerSetMedia(){
+/*        $this->context->controller->registerJavascript(
+            'module-euCookieSmart-euCookieSmart',
+            'modules/'.$this->name.'view/js/euCookieSmart.js',
+            [
+                'position' => 'head',
+                'inline' => true,
+                'priority' => 1000,
+            ]
+        );*/
+
+    }
+
+    public function HookDisplayFooter(){
         $this->context->smarty->assign(
             $this->getConfigFormValues()
         );
-
         return $this->display(__FILE__, 'euCookieSmart.tpl');
-
     }
 }
