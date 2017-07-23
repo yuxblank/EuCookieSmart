@@ -51,13 +51,13 @@
         expireDate.setTime(expireDate.getTime()+(options.expireDays*86400000));
         expireDate = expireDate.toGMTString();
 
-        var cookieEntry = 'cb-enabled={value}; expires='+expireDate+'; path=/';
+        var cookieEntry = 'eucookiesmrt={value}; expires='+expireDate+'; path=/';
 
         //Retrieves current cookie preference
         var i,cookieValue='',aCookie,aCookies=document.cookie.split('; ');
         for (i=0;i<aCookies.length;i++){
             aCookie = aCookies[i].split('=');
-            if(aCookie[0]=='cb-enabled'){
+            if(aCookie[0]=='eucookiesmrt'){
                 cookieValue = aCookie[1];
             }
         }

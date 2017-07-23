@@ -63,6 +63,7 @@ class EuCookieSmart extends Module
             Configuration::updateValue('EUCOOKIESMART_BOTTOM', false) &&
             Configuration::updateValue('EUCOOKIESMART_EFFECT', 'slide') &&
             Configuration::updateValue('EUCOOKIESMART_EXPIRE_DAYS', 30) &&
+            Configuration::updateValue('EUCOOKIESMART_STYLE', "default") &&
             parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
@@ -401,6 +402,20 @@ class EuCookieSmart extends Module
                             'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
                         )
                     ),
+
+                    array(
+                        'type' => 'select',                              // This is a <select> tag.
+                        'label' => $this->l('Style'),         // The <label> for this <select> tag.
+                        'desc' => $this->l('Choose a style'),  // A help text, displayed right next to the <select> tag.
+                        'name' => 'EUCOOKIESMART_STYLE',                     // The content of the 'id' attribute of the <select> tag.
+                        'required' => true,                              // If set to true, this option must be set.
+                        'options' => array(
+                            'query' => $this->getStyleList(),                                              // $options contains the data itself.
+                            'id' => 'id_option',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
+                            'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
+                        )
+                    ),
+
                     array(
                         'col' => 2,
                         'type' => 'text',
@@ -419,6 +434,17 @@ class EuCookieSmart extends Module
                 ),
             ),
         );
+    }
+
+
+
+    private function getStyleList(){
+        $list = array();
+        $files = glob(__DIR__ . '/views/css/styles/' . '*.css');
+        foreach ($files as $file){
+            $list[] = ["id_option" => basename($file), "name" =>basename($file,".css")];
+        }
+        return $list;
     }
 
     /**
@@ -466,7 +492,8 @@ class EuCookieSmart extends Module
                 'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
                 'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
                 'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop)
+                'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop),
+                'EUCOOKIESMART_STYLE' => Configuration::get('EUCOOKIESMART_STYLE', null, $id_shop_group, $id_shop)
             );
     }
 
@@ -550,14 +577,14 @@ class EuCookieSmart extends Module
      */
     public function hookHeader()
     {
-        $this->context->controller->addJS($this->_path . '/views/js/front.js');
-        $this->context->controller->addCSS($this->_path . '/views/css/front.css');
+
     }
 
     public function hookDisplayHeader()
     {
-        $this->context->controller->addJS($this->_path . '/views/js/euCookieSmart.js');
-        $this->context->controller->addCSS($this->_path . '/views/css/front.css');
+        $this->context->controller->addJS($this->_path . 'views/js/euCookieSmart.js');
+        $cssFile = Configuration::get("EUCOOKIESMART_STYLE");
+        $this->context->controller->addCSS($this->_path . 'views/css/styles/'. ($cssFile? $cssFile : 'default.css'));
     }
 
     public function hookActionFrontControllerSetMedia(){
@@ -574,9 +601,7 @@ class EuCookieSmart extends Module
     }
 
     public function HookDisplayFooter(){
-        $this->context->smarty->assign(
-            $this->getConfigFormValues()
-        );
+        $this->context->smarty->assign($this->getConfigFormValues());
         return $this->display(__FILE__, 'euCookieSmart.tpl');
     }
 }
