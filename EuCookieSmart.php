@@ -488,13 +488,13 @@ class EuCookieSmart extends Module
     }
 
     public function getText(){
-        return [
-        "cookiePolicy" => $this->l('Read cookies policy', $this->name) ,
-        "cookieMsg" => $this->l('This site uses cookies required for correct operation. By closing this banner, scrolling the page, clicking on a link or continuing navigation in any other way, you consent to the use of cookies.', $this->name),
-        "cookieAcceptText" => $this->l('I Understand', $this->name),
-        "cookieDeclineText" => $this->l('Disable cookies', $this->name),
-        "cookiePolicyText" => $this->l("Privacy policy", $this->name)
-        ];
+        return array(
+        'cookiePolicy' => $this->l('Read cookies policy', $this->name) ,
+        'cookieMsg' => $this->l('This site uses cookies required for correct operation. By closing this banner, scrolling the page, clicking on a link or continuing navigation in any other way, you consent to the use of cookies.', $this->name),
+        'cookieAcceptText' => $this->l('I Understand', $this->name),
+        'cookieDeclineText' => $this->l('Disable cookies', $this->name),
+        'cookiePolicyText' => $this->l('Privacy policy', $this->name)
+        );
     }
 
 }

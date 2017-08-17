@@ -34,3 +34,7 @@ $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_f3b8172fd3cd12738aba5ccee7d27
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_c39242e0a3a10cc3bad88a52e8491fac'] = 'Questo sito utilizza cookie necessari al corretto funzionamento. Chiudendo questo banner, scorrendo questa pagina, cliccando su un link o proseguendo la navigazione in altra maniera, acconsenti all’uso dei cookie.';
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_c6d10c1a74ef9761e6a1853662b7f42a'] = 'Ho capito';
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_c3d73e43a5bfab9bfc4d9d27c7d0da2f'] = 'Disabilita i cookies';
+$_MODULE['<{eucookiesmart}prestashop>eucookiesmart_56c34c6410dd45c5cec44149ad0ce037'] = 'Privacy Policy';
+$_MODULE['<{eucookiesmart}prestashop>configure_9fb3df0f279fc8dc4e48c9f210d178b8'] = 'EuCookieSmart';
+$_MODULE['<{eucookiesmart}prestashop>configure_cae03a5411759cfb664a17eb9dd0ed76'] = 'Questo modulo mostra un Banner per la Cookie Law EU';
+$_MODULE['<{eucookiesmart}prestashop>configure_e2377297f08a03a493c134d08731fbae'] = 'Puoi configurarlo usando questo form.';
