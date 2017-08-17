@@ -24,21 +24,18 @@ class EuCookieSmart extends Module
         $this->tab = 'front_office_features';
         $this->version = '0.0.1';
         $this->author = 'Yuri Blanc';
-        $this->need_instance = 1;
+        //$this->need_instance = 1;
 
         /**
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
          */
         $this->bootstrap = true;
-
-        parent::__construct();
-
         $this->displayName = $this->l('EuCookieSmart');
         $this->description = $this->l('Cookie law banner with ajax features');
-
         $this->confirmUninstall = $this->l('Are you sure to uninstall this module?');
-
         $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+
+        parent::__construct();
     }
 
     /**
@@ -59,14 +56,13 @@ class EuCookieSmart extends Module
             Configuration::updateValue('EUCOOKIESMART_BOTTOM', false) &&
             Configuration::updateValue('EUCOOKIESMART_EFFECT', 'slide') &&
             Configuration::updateValue('EUCOOKIESMART_EXPIRE_DAYS', 30) &&
-            Configuration::updateValue('EUCOOKIESMART_STYLE', "default") &&
+            Configuration::updateValue('EUCOOKIESMART_STYLE', "default.css") &&
             parent::install() &&
             $this->registerHook('backOfficeHeader') &&
             $this->registerHook('displayHeader') &&
             $this->registerHook('actionFrontControllerSetMedia') &&
             $this->registerHook('displayFooter');
     }
-
 
 
     public function uninstall()
@@ -76,9 +72,9 @@ class EuCookieSmart extends Module
             $bool = Configuration::deleteByName($key);
         }
         $bool &= $this->unregisterHook('backOfficeHeader') &&
-        $this->unregisterHook('displayHeader') &&
-        $this->unregisterHook('actionFrontControllerSetMedia') &&
-        $this->unregisterHook('displayFooter');
+            $this->unregisterHook('displayHeader') &&
+            $this->unregisterHook('actionFrontControllerSetMedia') &&
+            $this->unregisterHook('displayFooter');
 
         return $bool && parent::uninstall();
     }
@@ -113,7 +109,7 @@ class EuCookieSmart extends Module
         $helper->table = $this->table;
         $helper->module = $this;
         $helper->default_form_language = $this->context->language->id;
-        $helper->allow_employee_form_lang =  Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
+        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
         $helper->default_form_language = $language->id;
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'submitEuCookieSmartModule';
@@ -139,7 +135,8 @@ class EuCookieSmart extends Module
     }
 
 
-    private function isMultiLang(){
+    private function isMultiLang()
+    {
         $languages = Language::getLanguages(false);
         return count($languages) > 1;
     }
@@ -378,12 +375,12 @@ class EuCookieSmart extends Module
     }
 
 
-
-    private function getStyleList(){
+    private function getStyleList()
+    {
         $list = array();
         $files = glob(__DIR__ . '/views/css/styles/' . '*.css');
-        foreach ($files as $file){
-            $list[] = ["id_option" => basename($file), "name" =>basename($file,".css")];
+        foreach ($files as $file) {
+            $list[] = ["id_option" => basename($file), "name" => basename($file, ".css")];
         }
         return $list;
     }
@@ -415,23 +412,24 @@ class EuCookieSmart extends Module
     }
 
 
-    private function getvaluesWithoutTranslation() {
+    private function getvaluesWithoutTranslation()
+    {
         $id_shop_group = Shop::getContextShopGroupID();
         $id_shop = Shop::getContextShopID();
         return array(
-                'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_POLICY' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_POLICY_ARTICLE' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_ACCEPT_CONTINUE' => Configuration::get('EUCOOKIESMART_ACCEPT_CONTINUE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_ACCEPT_SCROLL' => Configuration::get('EUCOOKIESMART_ACCEPT_SCROLL', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_RENEW_VISIT' => Configuration::get('EUCOOKIESMART_RENEW_VISIT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_STYLE' => Configuration::get('EUCOOKIESMART_STYLE', null, $id_shop_group, $id_shop)
-            );
+            'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BUTTON_POLICY' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BUTTON_POLICY_ARTICLE' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_ACCEPT_CONTINUE' => Configuration::get('EUCOOKIESMART_ACCEPT_CONTINUE', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_ACCEPT_SCROLL' => Configuration::get('EUCOOKIESMART_ACCEPT_SCROLL', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_RENEW_VISIT' => Configuration::get('EUCOOKIESMART_RENEW_VISIT', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_STYLE' => Configuration::get('EUCOOKIESMART_STYLE', null, $id_shop_group, $id_shop)
+        );
     }
 
     /**
@@ -465,35 +463,38 @@ class EuCookieSmart extends Module
     {
         $this->context->controller->addJS($this->_path . 'views/js/euCookieSmart.js');
         $cssFile = Configuration::get("EUCOOKIESMART_STYLE");
-        $this->context->controller->addCSS($this->_path . 'views/css/styles/'. ($cssFile? $cssFile : 'default.css'));
+        $this->context->controller->addCSS($this->_path . 'views/css/styles/' . ($cssFile ? $cssFile : 'default.css'));
     }
 
-    public function hookActionFrontControllerSetMedia(){
-/*        $this->context->controller->registerJavascript(
-            'module-euCookieSmart-euCookieSmart',
-            'modules/'.$this->name.'view/js/euCookieSmart.js',
-            [
-                'position' => 'head',
-                'inline' => true,
-                'priority' => 1000,
-            ]
-        );*/
+    public function hookActionFrontControllerSetMedia()
+    {
+        /*        $this->context->controller->registerJavascript(
+                    'module-euCookieSmart-euCookieSmart',
+                    'modules/'.$this->name.'view/js/euCookieSmart.js',
+                    [
+                        'position' => 'head',
+                        'inline' => true,
+                        'priority' => 1000,
+                    ]
+                );*/
 
     }
 
-    public function HookDisplayFooter(){
+    public function HookDisplayFooter()
+    {
         $this->context->smarty->assign($this->getConfigFormValues());
         $this->context->smarty->assign($this->getText());
         return $this->display(__FILE__, 'euCookieSmart.tpl');
     }
 
-    public function getText(){
+    public function getText()
+    {
         return array(
-        'cookiePolicy' => $this->l('Read cookies policy', $this->name) ,
-        'cookieMsg' => $this->l('This site uses cookies required for correct operation. By closing this banner, scrolling the page, clicking on a link or continuing navigation in any other way, you consent to the use of cookies.', $this->name),
-        'cookieAcceptText' => $this->l('I Understand', $this->name),
-        'cookieDeclineText' => $this->l('Disable cookies', $this->name),
-        'cookiePolicyText' => $this->l('Privacy policy', $this->name)
+            'cookiePolicy' => $this->l('Read cookies policy', $this->name),
+            'cookieMsg' => $this->l('This site uses cookies required for correct operation. By closing this banner, scrolling the page, clicking on a link or continuing navigation in any other way, you consent to the use of cookies.', $this->name),
+            'cookieAcceptText' => $this->l('I Understand', $this->name),
+            'cookieDeclineText' => $this->l('Disable cookies', $this->name),
+            'cookiePolicyText' => $this->l('Privacy policy', $this->name)
         );
     }
 

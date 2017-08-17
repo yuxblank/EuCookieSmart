@@ -10,7 +10,7 @@
  */
 
 
-#cookie-bar {background: #dadada; height:auto; line-height:24px; color:#0e0e0e; text-align:center; padding:3px 0;}
+#cookie-bar {background: #dadada; height:auto; line-height:24px; color:#0e0e0e; text-align:center; padding:3px 0; z-index: 2000}
 #cookie-bar.fixed {position:fixed; top:0; left:0; width:100%;}
 #cookie-bar.fixed.bottom {bottom:0; top:auto;}
 #cookie-bar p {margin:0; padding:0;}
