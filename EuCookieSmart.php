@@ -392,30 +392,6 @@ class EuCookieSmart extends Module
     {
         $id_shop_group = Shop::getContextShopGroupID();
         $id_shop = Shop::getContextShopID();
-        $values = array();
-        $languages = Language::getLanguages(false);
-
-        /*
-        if ($this->isMultiLang()) {
-            foreach ($languages as $language) {
-                $values['EUCOOKIESMART_MESSAGE_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_MESSAGE', $language['id_lang'], $id_shop_group, $id_shop);
-                $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
-                $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_DECLINE_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
-                $values['EUCOOKIESMART_BUTTON_POLICY_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_POLICY_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
-            }
-            return array_merge($values, $this->getvaluesWithoutTranslation());
-        }
-        */
-
-        return $this->getvaluesWithoutTranslation();
-
-    }
-
-
-    private function getvaluesWithoutTranslation()
-    {
-        $id_shop_group = Shop::getContextShopGroupID();
-        $id_shop = Shop::getContextShopID();
         return array(
             'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
             'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
@@ -430,7 +406,10 @@ class EuCookieSmart extends Module
             'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop),
             'EUCOOKIESMART_STYLE' => Configuration::get('EUCOOKIESMART_STYLE', null, $id_shop_group, $id_shop)
         );
+
     }
+
+
 
     /**
      * Save form data.
@@ -440,7 +419,7 @@ class EuCookieSmart extends Module
 
         if (Tools::isSubmit('saveConfig')) {
 
-            foreach (array_keys($this->getvaluesWithoutTranslation()) as $key) {
+            foreach (array_keys($this->getConfigFormValues()) as $key) {
                 Configuration::updateValue($key, Tools::getValue($key));
             }
         }
@@ -484,6 +463,7 @@ class EuCookieSmart extends Module
     {
         $this->context->smarty->assign($this->getConfigFormValues());
         $this->context->smarty->assign($this->getText());
+        $this->context->smarty->assign("policyCMSlink",$this->context->link->getCMSLink($this->getConfigFormValues()['EUCOOKIESMART_BUTTON_POLICY_ARTICLE']));
         return $this->display(__FILE__, 'euCookieSmart.tpl');
     }
 

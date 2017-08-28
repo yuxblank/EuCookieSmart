@@ -22,7 +22,7 @@
         declineText: '{$cookieDeclineText}',
         policyButton: '{$EUCOOKIESMART_BUTTON_POLICY}',
         policyText: '{$cookiePolicyText|escape:"quotes"}',
-        policyURL: '{$link->getCMSLink($EUCOOKIESMART_BUTTON_POLICY_ARTICLE)}',
+        policyURL: '{$policyCMSlink}',
         acceptOnContinue: '{$EUCOOKIESMART_ACCEPT_CONTINUE}',
         expireDays: '{$EUCOOKIESMART_EXPIRE_DAYS|escape:"quotes"}',
         renewOnVisit: '{$EUCOOKIESMART_RENEW_VISIT}',
