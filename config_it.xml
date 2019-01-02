@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>EuCookieSmart</name>
-	<displayName><![CDATA[EuCookieSmart]]></displayName>
+	<name>eucookiesmart</name>
+	<displayName><![CDATA[eucookiesmart]]></displayName>
 	<version><![CDATA[0.0.1]]></version>
 	<description><![CDATA[Modulo per la Cookie Law personalizzabile e facile da usare]]></description>
 	<author><![CDATA[Yuri Blanc]]></author>

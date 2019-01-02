@@ -14,13 +14,13 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class EuCookieSmart extends Module
+class eucookiesmart extends Module
 {
     protected $config_form = false;
 
     public function __construct()
     {
-        $this->name = 'EuCookieSmart';
+        $this->name = 'eucookiesmart';
         $this->tab = 'front_office_features';
         $this->version = '0.0.1';
         $this->author = 'Yuri Blanc';
@@ -33,7 +33,7 @@ class EuCookieSmart extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('EuCookieSmart');
+        $this->displayName = $this->l('eucookiesmart');
         $this->description = $this->l('Cookie law banner with ajax features');
 
         $this->confirmUninstall = $this->l('Are you sure to uninstall this module?');

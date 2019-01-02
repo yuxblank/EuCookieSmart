@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{eucookiesmart}prestashop>eucookiesmart_9fb3df0f279fc8dc4e48c9f210d178b8'] = 'EuCookieSmart';
+$_MODULE['<{eucookiesmart}prestashop>eucookiesmart_9fb3df0f279fc8dc4e48c9f210d178b8'] = 'eucookiesmart';
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_1b893b886cc6e0a6c013bf30ce69516c'] = 'Modulo per la Cookie Law personalizzabile e facile da usare';
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_812e46968f23a2c7f5d7b4e0746203f0'] = 'Sei sicuro di voler disinstallare questo modulo?';
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';

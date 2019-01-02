@@ -10,7 +10,7 @@
  * This program is distributed WITHOUT ANY WARRANTY;
  */
 
-$sql = array();
+/*$sql = array();
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'EuCookieSmart` (
     `id_EuCookieSmart` int(11) NOT NULL AUTO_INCREMENT,
@@ -21,4 +21,4 @@ foreach ($sql as $query) {
     if (Db::getInstance()->execute($query) == false) {
         return false;
     }
-}
+}*/
