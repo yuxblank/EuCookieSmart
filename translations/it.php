@@ -1,5 +1,15 @@
 <?php
-
+/**
+ * NOTICE OF LICENSE
+ *
+ * EuCookieSmart is a module for display a cookie law banner.
+ * Copyright (C) 2017 Yuri Blanc
+ * Email: yuxblank@gmail.com
+ * Website: www.yuriblanc.it
+ *
+ * This program is distributed WITHOUT ANY WARRANTY
+ * @license GNU General Public License v3.0
+ */
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{eucookiesmart}prestashop>eucookiesmart_9fb3df0f279fc8dc4e48c9f210d178b8'] = 'EuCookieSmart';
