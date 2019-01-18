@@ -27,4 +27,4 @@ EuCookieSmart is a  [PrestaShop](https://www.prestashop.com/it) module for displ
 
 
 ## Compatibility
-Tested with PrestaShop 1.6.x (master) and 1.7.x.(1.7)
+Tested with PrestaShop 1.6.x (Branch master) and 1.7.x.(Branch 1.7)
