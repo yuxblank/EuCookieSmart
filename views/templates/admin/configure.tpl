@@ -2,12 +2,13 @@
 /**
  * NOTICE OF LICENSE
  *
- * only18plus is a module for blocking and verifying user age
+ * EuCookieSmart is a module for display a cookie law banner.
  * Copyright (C) 2017 Yuri Blanc
- * Email: info@yuriblanc.it
+ * Email: yuxblank@gmail.com
  * Website: www.yuriblanc.it
  *
- * This program is distributed WITHOUT ANY WARRANTY;
+ * This program is distributed WITHOUT ANY WARRANTY
+ * @license GNU General Public License v3.0
  */
 *}
 
