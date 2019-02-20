@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>EuCookieSmart</name>
+	<name>eucookiesmart</name>
 	<displayName><![CDATA[EuCookieSmart]]></displayName>
 	<version><![CDATA[0.0.1]]></version>
 	<description><![CDATA[Cookie law banner with ajax features]]></description>
