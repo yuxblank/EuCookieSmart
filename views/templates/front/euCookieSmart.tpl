@@ -16,20 +16,20 @@
 <script>
 
     var euCookieSmartConfig = {
-        message: '{$cookieMsg}',
-        acceptButton: '{$EUCOOKIESMART_BUTTON_ACCEPT}',
-        acceptText: '{$cookieAcceptText|escape:"quotes"}',
+        message: "{$cookieMsg}",
+        acceptButton: "{$EUCOOKIESMART_BUTTON_ACCEPT}",
+        acceptText: "{$cookieAcceptText|escape:"quotes"}",
         declineButton: false,
-        declineText: '{$cookieDeclineText}',
-        policyButton: '{$EUCOOKIESMART_BUTTON_POLICY}',
-        policyText: '{$cookiePolicyText|escape:"quotes"}',
-        policyURL: '{$policyCMSlink}',
-        acceptOnContinue: '{$EUCOOKIESMART_ACCEPT_CONTINUE}',
-        expireDays: '{$EUCOOKIESMART_EXPIRE_DAYS|escape:"quotes"}',
-        renewOnVisit: '{$EUCOOKIESMART_RENEW_VISIT}',
-        effect: '{$EUCOOKIESMART_EFFECT|escape:"quotes"}',
-        fixed: '{$EUCOOKIESMART_FIXED|boolval}',
-        bottom: '{$EUCOOKIESMART_BOTTOM}'
+        declineText: "{$cookieDeclineText}",
+        policyButton: "{$EUCOOKIESMART_BUTTON_POLICY}",
+        policyText: "{$cookiePolicyText|escape:"quotes"}",
+        policyURL: "{$policyCMSlink}",
+        acceptOnContinue: "{$EUCOOKIESMART_ACCEPT_CONTINUE}",
+        expireDays: "{$EUCOOKIESMART_EXPIRE_DAYS|escape:"quotes"}",
+        renewOnVisit: "{$EUCOOKIESMART_RENEW_VISIT}",
+        effect: "{$EUCOOKIESMART_EFFECT|escape:"quotes"}",
+        fixed: "{$EUCOOKIESMART_FIXED|boolval}",
+        bottom: "{$EUCOOKIESMART_BOTTOM}"
     };
 
 
