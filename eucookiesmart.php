@@ -23,7 +23,7 @@ class eucookiesmart extends Module
     {
         $this->name = 'eucookiesmart';
         $this->tab = 'front_office_features';
-        $this->version = '0.0.1';
+        $this->version = '1.0.1';
         $this->author = 'Yuri Blanc';
         //$this->need_instance = 1;
 
