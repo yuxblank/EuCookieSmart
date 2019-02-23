@@ -13,8 +13,6 @@ EuCookieSmart is a  [PrestaShop](https://www.prestashop.com/it) module for displ
   * accept on scroll
   * display top/bottom
   * change effect (slide, fade, hide)
-  * Fixed/static position
-  * Renew in days (should be accepted again)
   * Built-in languages (italian, english)
   
 ### Preview
@@ -29,4 +27,4 @@ EuCookieSmart is a  [PrestaShop](https://www.prestashop.com/it) module for displ
 
 
 ## Compatibility
-Tested with PrestaShop 1.6.x (Branch master) and 1.7.x.(Branch 1.7)
+Tested with PrestaShop 1.6.x (master) and 1.7.x.(1.7)

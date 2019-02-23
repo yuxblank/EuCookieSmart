@@ -1,0 +1,23 @@
+/**
+ * NOTICE OF LICENSE
+ *
+ * EuCookieSmart is a module for display a cookie law banner.
+ * Copyright (C) 2017 Yuri Blanc
+ * Email: yuxblank@gmail.com
+ * Website: www.yuriblanc.it
+ *
+ * This program is distributed WITHOUT ANY WARRANTY
+ * @license GNU General Public License v3.0
+ */
+
+#cookie-bar {background:#333; height:auto; line-height:24px; color:#eeeeee; text-align:center; padding:3px 0;}
+#cookie-bar.fixed {position:fixed; top:0; left:0; width:100%;}
+#cookie-bar.fixed.bottom {bottom:0; top:auto;}
+#cookie-bar p {margin:0; padding:0; color:#eee}
+#cookie-bar a {color:#ffffff; display:inline-block; border-radius:3px; text-decoration:none; padding:0 6px; margin-left:8px;}
+#cookie-bar .cb-enable {background:#007700;}
+#cookie-bar .cb-enable:hover {background:#30B328 ;}
+#cookie-bar .cb-disable {background:#990000;}
+#cookie-bar .cb-disable:hover {background:#bb0000;}
+#cookie-bar .cb-policy {background:#700;}
+#cookie-bar .cb-policy:hover {background:#A40000;}

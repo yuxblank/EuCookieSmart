@@ -10,11 +10,3 @@
  * This program is distributed WITHOUT ANY WARRANTY
  * @license GNU General Public License v3.0
  */
-
-$sql = array();
-
-foreach ($sql as $query) {
-    if (Db::getInstance()->execute($query) == false) {
-        return false;
-    }
-}

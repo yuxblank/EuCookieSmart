@@ -10,7 +10,6 @@
  * This program is distributed WITHOUT ANY WARRANTY
  * @license GNU General Public License v3.0
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }

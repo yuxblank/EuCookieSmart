@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>eucookiesmart</name>
-	<displayName><![CDATA[eucookiesmart]]></displayName>
-	<version><![CDATA[0.0.1]]></version>
-	<description><![CDATA[Modulo per la Cookie Law personalizzabile e facile da usare]]></description>
-	<author><![CDATA[Yuri Blanc]]></author>
-	<tab><![CDATA[front_office_features]]></tab>
+    <name>eucookiesmart</name>
+    <displayName><![CDATA[EuCookieSmart]]></displayName>
+    <version><![CDATA[0.0.1]]></version>
+    <description><![CDATA[Modulo per la Cookie Law personalizzabile e facile da usare]]></description>
+    <author><![CDATA[Yuri Blanc]]></author>
+    <tab><![CDATA[front_office_features]]></tab>
 	<confirmUninstall><![CDATA[Sei sicuro di voler disinstallare questo modulo?]]></confirmUninstall>
-	<is_configurable>1</is_configurable>
-	<need_instance>1</need_instance>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
 	<limited_countries></limited_countries>
 </module>

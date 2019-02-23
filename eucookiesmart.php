@@ -25,21 +25,18 @@ class eucookiesmart extends Module
         $this->tab = 'front_office_features';
         $this->version = '0.0.1';
         $this->author = 'Yuri Blanc';
-        $this->need_instance = 1;
+        //$this->need_instance = 1;
 
         /**
          * Set $this->bootstrap to true if your module is compliant with bootstrap (PrestaShop 1.6)
          */
         $this->bootstrap = true;
+        $this->displayName = $this->l('EuCookieSmart');
+        $this->description = $this->l('Cookie law banner with ajax features');
+        $this->confirmUninstall = $this->l('Are you sure to uninstall this module?');
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 
         parent::__construct();
-
-        $this->displayName = $this->l('eucookiesmart');
-        $this->description = $this->l('Cookie law banner with ajax features');
-
-        $this->confirmUninstall = $this->l('Are you sure to uninstall this module?');
-
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
     }
 
     /**
@@ -49,13 +46,9 @@ class eucookiesmart extends Module
     public function install()
     {
         return
-            ConfigurationCore::updateValue('EUCOOKIESMART_MESSAGE', 'We use cookies to track usage and preferences.') &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_ACCEPT', true) &&
-            Configuration::updateValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', 'I Understand') &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_DECLINE', true) &&
-            Configuration::updateValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT', 'Disable cookies') &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_POLICY', true) &&
-            Configuration::updateValue('EUCOOKIESMART_BUTTON_POLICY_TEXT', 'Privacy policy') &&
             Configuration::updateValue('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null) &&
             Configuration::updateValue('EUCOOKIESMART_ACCEPT_CONTINUE', false) &&
             Configuration::updateValue('EUCOOKIESMART_ACCEPT_SCROLL', false) &&
@@ -64,12 +57,13 @@ class eucookiesmart extends Module
             Configuration::updateValue('EUCOOKIESMART_BOTTOM', false) &&
             Configuration::updateValue('EUCOOKIESMART_EFFECT', 'slide') &&
             Configuration::updateValue('EUCOOKIESMART_EXPIRE_DAYS', 30) &&
+            Configuration::updateValue('EUCOOKIESMART_STYLE', "default.css") &&
             parent::install() &&
-            $this->registerHook('header') &&
             $this->registerHook('backOfficeHeader') &&
-            $this->registerHook('displayHeader');
+            $this->registerHook('displayHeader') &&
+            $this->registerHook('actionFrontControllerSetMedia') &&
+            $this->registerHook('displayFooter');
     }
-
 
 
     public function uninstall()
@@ -78,6 +72,10 @@ class eucookiesmart extends Module
         foreach ($this->getConfigFormValues() as $key => $val) {
             $bool = Configuration::deleteByName($key);
         }
+        $bool &= $this->unregisterHook('backOfficeHeader') &&
+            $this->unregisterHook('displayHeader') &&
+            $this->unregisterHook('actionFrontControllerSetMedia') &&
+            $this->unregisterHook('displayFooter');
 
         return $bool && parent::uninstall();
     }
@@ -112,7 +110,7 @@ class eucookiesmart extends Module
         $helper->table = $this->table;
         $helper->module = $this;
         $helper->default_form_language = $this->context->language->id;
-        $helper->allow_employee_form_lang =  Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
+        $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
         $helper->default_form_language = $language->id;
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'submitEuCookieSmartModule';
@@ -134,37 +132,16 @@ class eucookiesmart extends Module
             'id_language' => $this->context->language->id
         );
 
-
-        if ($isMultiLang)
-            return $this->getMultiLanguageInfoMsg().$helper->generateForm(array($this->getConfigForm()));
-        else
-            return $helper->generateForm(array($this->getConfigForm()));
+        return $helper->generateForm(array($this->getConfigForm()));
     }
 
 
-    private function isMultiLang(){
+    private function isMultiLang()
+    {
         $languages = Language::getLanguages(false);
         return count($languages) > 1;
     }
 
-
-
-    protected function getMultiLanguageInfoMsg()
-    {
-        return '<p class="alert alert-warning">'.
-            $this->l('Since multiple languages are activated on your shop, please mind to upload your image for each one of them').
-            '</p>';
-    }
-
-    protected function getWarningMultishopHtml()
-    {
-        if (Shop::getContext() == Shop::CONTEXT_GROUP || Shop::getContext() == Shop::CONTEXT_ALL)
-            return '<p class="alert alert-warning">'.
-                $this->l('You cannot manage slides items from a "All Shops" or a "Group Shop" context, select directly the shop you want to edit').
-                '</p>';
-        else
-            return '';
-    }
 
     /**
      * Create the structure of your form.
@@ -178,15 +155,6 @@ class eucookiesmart extends Module
                     'icon' => 'icon-cogs',
                 ),
                 'input' => array(
-                /*    array(
-                        'col' => 6,
-                        'type' => 'text',
-                        'prefix' => '<i class="icon icon-gears"></i>',
-                        'desc' => $this->l('Enter the message to display'),
-                        'name' => 'EUCOOKIESMART_MESSAGE',
-                        'label' => $this->l('Text message'),
-                        'lang' => true,
-                    ),*/
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Display accept button'),
@@ -206,15 +174,6 @@ class eucookiesmart extends Module
                             )
                         ),
                     ),
-/*                    array(
-                        'col' => 2,
-                        'type' => 'text',
-                        'prefix' => '<i class="icon icon-gears"></i>',
-                        'desc' => $this->l('Enter the text for the decline button'),
-                        'name' => 'EUCOOKIESMART_BUTTON_ACCEPT_TEXT',
-                        'label' => $this->l('Accept button text'),
-                        'lang' => true,
-                    ),*/
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Display decline button'),
@@ -234,15 +193,6 @@ class eucookiesmart extends Module
                             )
                         ),
                     ),
-                /*    array(
-                        'col' => 2,
-                        'type' => 'text',
-                        'prefix' => '<i class="icon icon-gears"></i>',
-                        'desc' => $this->l('Enter the text for the decline button'),
-                        'name' => 'EUCOOKIESMART_BUTTON_DECLINE_TEXT',
-                        'label' => $this->l('Decline button text'),
-                        'lang' => true,
-                    ),*/
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Display policy button'),
@@ -262,15 +212,6 @@ class eucookiesmart extends Module
                             )
                         ),
                     ),
-                  /*  array(
-                        'col' => 2,
-                        'type' => 'text',
-                        'prefix' => '<i class="icon icon-gears"></i>',
-                        'desc' => $this->l('Enter the text for the policy button'),
-                        'name' => 'EUCOOKIESMART_BUTTON_POLICY_TEXT',
-                        'label' => $this->l('Policy button text'),
-                        'lang' => true,
-                    ),*/
                     array(
                         'col' => 2,
                         'type' => 'text',
@@ -400,6 +341,20 @@ class eucookiesmart extends Module
                             'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
                         )
                     ),
+
+                    array(
+                        'type' => 'select',                              // This is a <select> tag.
+                        'label' => $this->l('Style'),         // The <label> for this <select> tag.
+                        'desc' => $this->l('Choose a style'),  // A help text, displayed right next to the <select> tag.
+                        'name' => 'EUCOOKIESMART_STYLE',                     // The content of the 'id' attribute of the <select> tag.
+                        'required' => true,                              // If set to true, this option must be set.
+                        'options' => array(
+                            'query' => $this->getStyleList(),                                              // $options contains the data itself.
+                            'id' => 'id_option',                           // The value of the 'id' key must be the same as the key for 'value' attribute of the <option> tag in each $options sub-array.
+                            'name' => 'name'                               // The value of the 'name' key must be the same as the key for the text content of the <option> tag in each $options sub-array.
+                        )
+                    ),
+
                     array(
                         'col' => 2,
                         'type' => 'text',
@@ -420,6 +375,17 @@ class eucookiesmart extends Module
         );
     }
 
+
+    private function getStyleList()
+    {
+        $list = array();
+        $files = glob(__DIR__ . '/views/css/styles/' . '*.css');
+        foreach ($files as $file) {
+            $list[] = ["id_option" => basename($file), "name" => basename($file, ".css")];
+        }
+        return $list;
+    }
+
     /**
      * Set values for the inputs.
      */
@@ -427,71 +393,21 @@ class eucookiesmart extends Module
     {
         $id_shop_group = Shop::getContextShopGroupID();
         $id_shop = Shop::getContextShopID();
-        $values = array();
-        $languages = Language::getLanguages(false);
-
-
-
-        if ($this->isMultiLang()) {
-            foreach ($languages as $language) {
-                $values['EUCOOKIESMART_MESSAGE_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_MESSAGE', $language['id_lang'], $id_shop_group, $id_shop);
-                $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
-                $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_DECLINE_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
-                $values['EUCOOKIESMART_BUTTON_POLICY_TEXT_' . $language['id_lang']] = Configuration::get('EUCOOKIESMART_BUTTON_POLICY_TEXT', $language['id_lang'], $id_shop_group, $id_shop);
-            }
-            return array_merge($values, $this->getvaluesWithoutTranslation());
-        }
-
-        return $this->getvaluesWithoutTranslation();
-
-    }
-
-
-    private function getvaluesWithoutTranslation() {
-        $id_shop_group = Shop::getContextShopGroupID();
-        $id_shop = Shop::getContextShopID();
         return array(
-                'EUCOOKIESMART_MESSAGE' => Configuration::get('EUCOOKIESMART_MESSAGE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_ACCEPT_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_DECLINE_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE_TEXT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_POLICY' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_POLICY_TEXT' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_TEXT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BUTTON_POLICY_ARTICLE' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_ACCEPT_CONTINUE' => Configuration::get('EUCOOKIESMART_ACCEPT_CONTINUE', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_ACCEPT_SCROLL' => Configuration::get('EUCOOKIESMART_ACCEPT_SCROLL', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_RENEW_VISIT' => Configuration::get('EUCOOKIESMART_RENEW_VISIT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
-                'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop)
-            );
-    }
-
-    public function getFormValues() {
-        $fields = array();
-
-        $languages = Language::getLanguages(false);
-
-        foreach ($languages as $lang)
-        {
-            $fields['EUCOOKIESMART_MESSAGE'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_MESSAGE'.'_'.$lang['id_lang']);
-            $fields['EUCOOKIESMART_BUTTON_ACCEPT_TEXT'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT'.'_'.$lang['id_lang']);
-            $fields['EUCOOKIESMART_BUTTON_DECLINE_TEXT'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT'.'_'.$lang['id_lang']);
-            $fields['EUCOOKIESMART_BUTTON_POLICY_TEXT'].'_'.$lang['id_lang'] = Tools::getValue('EUCOOKIESMART_BUTTON_POLICY_TEXT'.'_'.$lang['id_lang']);
-        }
-
-        return $fields;
-    }
-
-    public function getTraducibleFields () {
-        return array(
-            'EUCOOKIESMART_MESSAGE',
-            'EUCOOKIESMART_BUTTON_ACCEPT_TEXT',
-            'EUCOOKIESMART_BUTTON_DECLINE_TEXT',
-            'EUCOOKIESMART_BUTTON_POLICY_TEXT'
+            'EUCOOKIESMART_BUTTON_ACCEPT' => Configuration::get('EUCOOKIESMART_BUTTON_ACCEPT', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BUTTON_DECLINE' => Configuration::get('EUCOOKIESMART_BUTTON_DECLINE', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BUTTON_POLICY' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BUTTON_POLICY_ARTICLE' => Configuration::get('EUCOOKIESMART_BUTTON_POLICY_ARTICLE', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_ACCEPT_CONTINUE' => Configuration::get('EUCOOKIESMART_ACCEPT_CONTINUE', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_ACCEPT_SCROLL' => Configuration::get('EUCOOKIESMART_ACCEPT_SCROLL', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_RENEW_VISIT' => Configuration::get('EUCOOKIESMART_RENEW_VISIT', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_FIXED' => Configuration::get('EUCOOKIESMART_FIXED', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_BOTTOM' => Configuration::get('EUCOOKIESMART_BOTTOM', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_EFFECT' => Configuration::get('EUCOOKIESMART_EFFECT', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_EXPIRE_DAYS' => Configuration::get('EUCOOKIESMART_EXPIRE_DAYS', null, $id_shop_group, $id_shop),
+            'EUCOOKIESMART_STYLE' => Configuration::get('EUCOOKIESMART_STYLE', null, $id_shop_group, $id_shop)
         );
+
     }
 
 
@@ -504,31 +420,9 @@ class eucookiesmart extends Module
 
         if (Tools::isSubmit('saveConfig')) {
 
-
-            $languages = Language::getLanguages(false);
-
-            if ($languages && count($languages)>1) {
-
-                $values = array();
-                foreach ($languages as $lang) {
-                    $values['EUCOOKIESMART_MESSAGE'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_MESSAGE_' . $lang['id_lang']);
-                    $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT_' . $lang['id_lang']);
-                    $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT_' . $lang['id_lang']);
-                    $values['EUCOOKIESMART_BUTTON_POLICY_TEXT'][$lang['id_lang']] = Tools::getValue('EUCOOKIESMART_BUTTON_POLICY_TEXT_' . $lang['id_lang']);
-                }
-
-                ConfigurationCore::updateValue('EUCOOKIESMART_MESSAGE', $values['EUCOOKIESMART_MESSAGE']);
-                ConfigurationCore::updateValue('EUCOOKIESMART_BUTTON_ACCEPT_TEXT', $values['EUCOOKIESMART_BUTTON_ACCEPT_TEXT']);
-                ConfigurationCore::updateValue('EUCOOKIESMART_BUTTON_DECLINE_TEXT', $values['EUCOOKIESMART_BUTTON_DECLINE_TEXT']);
-                ConfigurationCore::updateValue('EUCOOKIESMART_BUTTON_POLICY_TEXT', $values['EUCOOKIESMART_BUTTON_POLICY_TEXT']);
-            }
-
-
-            foreach (array_keys($this->getvaluesWithoutTranslation()) as $key) {
+            foreach (array_keys($this->getConfigFormValues()) as $key) {
                 Configuration::updateValue($key, Tools::getValue($key));
             }
-
-            // todo non multilanguage
         }
 
     }
@@ -544,23 +438,45 @@ class eucookiesmart extends Module
         }
     }
 
-    /**
-     * Add the CSS & JavaScript files you want to be added on the FO.
-     */
-    public function hookHeader()
-    {
-        $this->context->controller->addJS($this->_path . '/views/js/front.js');
-        $this->context->controller->addCSS($this->_path . '/views/css/front.css');
-    }
 
     public function hookDisplayHeader()
     {
-        $this->hookHeader();
-        $this->context->smarty->assign(
-            $this->getConfigFormValues()
-        );
+        $this->context->controller->addJS($this->_path . 'views/js/euCookieSmart.js');
+        $cssFile = Configuration::get("EUCOOKIESMART_STYLE");
+        $this->context->controller->addCSS($this->_path . 'views/css/styles/' . ($cssFile ? $cssFile : 'default.css'));
+    }
 
-        return $this->display(__FILE__, 'euCookieSmart.tpl');
+    public function hookActionFrontControllerSetMedia()
+    {
+        /*        $this->context->controller->registerJavascript(
+                    'module-euCookieSmart-euCookieSmart',
+                    'modules/'.$this->name.'view/js/euCookieSmart.js',
+                    [
+                        'position' => 'head',
+                        'inline' => true,
+                        'priority' => 1000,
+                    ]
+                );*/
 
     }
+
+    public function HookDisplayFooter()
+    {
+        $this->context->smarty->assign($this->getConfigFormValues());
+        $this->context->smarty->assign($this->getText());
+        $this->context->smarty->assign("policyCMSlink",$this->context->link->getCMSLink($this->getConfigFormValues()['EUCOOKIESMART_BUTTON_POLICY_ARTICLE']));
+        return $this->display(__FILE__, 'euCookieSmart.tpl');
+    }
+
+    public function getText()
+    {
+        return array(
+            'cookiePolicy' => $this->l('Read cookies policy', $this->name),
+            'cookieMsg' => $this->l('This site uses cookies required for correct operation. By closing this banner, scrolling the page, clicking on a link or continuing navigation in any other way, you consent to the use of cookies.', $this->name),
+            'cookieAcceptText' => $this->l('I Understand', $this->name),
+            'cookieDeclineText' => $this->l('Disable cookies', $this->name),
+            'cookiePolicyText' => $this->l('Privacy policy', $this->name)
+        );
+    }
+
 }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-	<name>EuCookieSmart</name>
+	<name>eucookiesmart</name>
 	<displayName><![CDATA[EuCookieSmart]]></displayName>
 	<version><![CDATA[0.0.1]]></version>
 	<description><![CDATA[Cookie law banner with ajax features]]></description>
 	<author><![CDATA[Yuri Blanc]]></author>
 	<tab><![CDATA[front_office_features]]></tab>
 	<is_configurable>1</is_configurable>
-	<need_instance>1</need_instance>
+	<need_instance>0</need_instance>
 </module>
