@@ -19,7 +19,7 @@
         message: "{$cookieMsg}",
         acceptButton: "{$EUCOOKIESMART_BUTTON_ACCEPT}",
         acceptText: "{$cookieAcceptText|escape:"quotes"}",
-        declineButton: false,
+        declineButton: {EUCOOKIESMART_BUTTON_DECLINE},
         declineText: "{$cookieDeclineText}",
         policyButton: "{$EUCOOKIESMART_BUTTON_POLICY}",
         policyText: "{$cookiePolicyText|escape:"quotes"}",
